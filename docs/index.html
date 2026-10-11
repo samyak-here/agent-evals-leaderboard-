@@ -9,7 +9,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<script src="vendor/echarts.min.js" defer></script>
+<!-- ECharts via CDN on the deployed site (jsdelivr). A vendored copy lives at
+     docs/vendor/echarts.min.js for offline local dev; it is intentionally not
+     committed (1MB exceeds the push channel). app.js degrades gracefully if
+     the CDN is unreachable. -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js" defer></script>
 </head>
 <body>
 <div class="grid-bg" aria-hidden="true"></div>
