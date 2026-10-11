@@ -5,8 +5,18 @@ accuracy, wall-clock latency and token cost, plotted as Pareto curves.
 Measured runs come from a single 24GB rig; paper-reported numbers are
 always labeled **paper**.
 
-**Site:** `docs/` is a dependency-free static page (ECharts vendored in
-`docs/vendor/`) — open `docs/index.html` or serve the folder.
+**Site:** `docs/` is a dependency-free static page (ECharts loads from CDN;
+a vendored copy lives in `docs/vendor/` for offline dev) — open
+`docs/index.html` or serve the folder.
+
+## Also in this repo: Repo Atlas (`/atlas/`)
+
+**Repo Atlas** — semantic search over a hand-curated library of 52 repos.
+Type "screen recorder with auto-zoom" and find the repo by *meaning*.
+READMEs are chunked and embedded with `all-MiniLM-L6-v2` (int8-quantized,
+shipped static); queries are embedded in the browser tab via Transformers.js —
+no server, nothing typed ever leaves the machine. Pipeline in `repo-atlas/`,
+site in `docs/atlas/`.
 
 ## Quickstart
 

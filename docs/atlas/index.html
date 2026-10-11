@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repo Atlas — semantic search over the library</title>
+<meta name="description" content="Semantic search over 52 hand-curated repos. Runs 100% in your browser — no server, no tracking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap bar-in">
+    <a class="wordmark" href="#">Repo&nbsp;Atlas</a>
+    <span class="tag mono" id="corpus-tag">indexing…</span>
+    <span class="status mono" id="engine-status"><i class="dot"></i><span id="engine-text">warming up</span></span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow mono">the card catalog · semantic edition</p>
+    <h1>Ask for it in <em>words.</em><br>Find it by <em>meaning.</em></h1>
+    <p class="lede">Fifty-two repos, hand-picked from reels and threads, indexed by what they
+    <em>do</em> — not what they're named. The search runs entirely in your browser.</p>
+
+    <div class="search-wrap">
+      <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+      <input id="q" type="text" autocomplete="off" spellcheck="false"
+             placeholder="Try &quot;screen recorder with auto-zoom&quot;…" aria-label="Search repos">
+      <kbd>/</kbd>
+    </div>
+    <div class="suggest" id="suggest">
+      <span class="mono dim">try:</span>
+    </div>
+    <div class="filters" id="filters"></div>
+  </section>
+
+  <section id="results-zone">
+    <p class="results-meta mono" id="results-meta"></p>
+    <div class="cards" id="cards"></div>
+    <div class="empty" id="empty" hidden>
+      <p class="empty-title">Nothing on this shelf.</p>
+      <p class="muted">No repo in the library matches that meaningfully. Try fewer words, or browse a category above.</p>
+    </div>
+  </section>
+
+  <section class="about panel">
+    <div class="about-grid">
+      <div>
+        <p class="eyebrow mono">how it works</p>
+        <h2>No server. No tracking.<br>Just vectors.</h2>
+      </div>
+      <div class="about-copy">
+        <p>Every repo's README is chunked and embedded with <span class="mono">all-MiniLM-L6-v2</span> into 384-dimensional vectors, precomputed once and shipped as a static file. Your query is embedded <em>in this tab</em> with the same model running in WebAssembly — then ranked by cosine similarity. Nothing you type ever leaves your machine.</p>
+        <p class="mono dim stats" id="index-stats"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span class="mono muted">repo atlas · the library, searchable by meaning</span>
+    <span class="mono muted" id="generated"></span>
+  </div>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
