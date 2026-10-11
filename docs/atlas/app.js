@@ -61,13 +61,24 @@ function setStatus(mode, text) {
 /* ---------- boot ---------- */
 async function boot() {
   setStatus("working", "loading index");
-  var res = await fetch(DATA_URL);
-  index = await res.json();
+  var base = await (await fetch(DATA_URL)).json();
+  var parts = await Promise.all(
+    base.chunk_parts.concat(base.vec_parts).map(function (p) {
+      return fetch("data/" + p).then(function (r) { return r.json(); });
+    })
+  );
+  var nChunks = base.chunk_parts.length;
+  var chunks = [];
+  for (var pi = 0; pi < nChunks; pi++) chunks = chunks.concat(parts[pi]);
+  var b64 = "";
+  for (var pj = nChunks; pj < parts.length; pj++) b64 += parts[pj].data;
+  index = { model: base.model, dim: base.dim, quant: base.quant,
+            repos: base.repos, chunks: chunks };
   var dim = index.dim, n = index.chunks.length;
   var vecs = new Float32Array(n * dim);
-  if (index.quant === "int8" && index.vecs) {
+  if (index.quant === "int8") {
     // compact shipping format: base64 int8, dequantize to float
-    var raw = atob(index.vecs);
+    var raw = atob(b64);
     var i8 = new Int8Array(raw.length);
     for (var k = 0; k < raw.length; k++) i8[k] = raw.charCodeAt(k);
     for (var k2 = 0; k2 < n * dim; k2++) vecs[k2] = i8[k2] / 127;
