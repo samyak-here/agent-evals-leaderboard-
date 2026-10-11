@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,51 +13,72 @@
 </head>
 <body>
 <div class="grid-bg" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
 
 <header class="topbar">
-  <div class="wrap topbar-inner">
-    <a class="wordmark" href="#">AGENT<span class="wm-sep">//</span>EVALS</a>
+  <div class="wrap bar-in">
+    <a class="wordmark" href="#">AGENT<span>//</span>EVALS</a>
     <nav class="topnav">
       <a href="#pareto">Pareto</a>
-      <a href="#boards">Architectures</a>
+      <a href="#boards">Boards</a>
       <a href="#runs">Runs</a>
-      <a href="#method">Methodology</a>
+      <a href="#method">Method</a>
     </nav>
-    <span class="suite-tag">GPQA&nbsp;diamond</span>
+    <div class="bar-right">
+      <span class="live"><i class="led led-live"></i>live</span>
+      <span class="clock mono" id="clock">--:--:--</span>
+      <span class="suite-tag">GPQA diamond</span>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="hero">
-    <p class="eyebrow">multi-agent systems benchmark · live</p>
+    <p class="eyebrow">multi-agent systems benchmark</p>
     <h1>Which agent architecture<br>actually <em>wins?</em></h1>
-    <p class="lede">Six open 7–8B models, three baseline harnesses, one brutal
-    question set. Every run is measured end-to-end — accuracy, wall-clock
-    latency, token spend — and plotted as Pareto curves, not vibes.
-    Paper-reported numbers are labeled <span class="badge paper">paper</span>;
-    everything else was executed on a single 24&nbsp;GB rig.</p>
-    <div class="kpis" id="kpis">
-      <div class="kpi"><span class="kpi-num" id="kpi-arch">–</span><span class="kpi-label">architectures</span></div>
-      <div class="kpi"><span class="kpi-num" id="kpi-q">–</span><span class="kpi-label">questions / run</span></div>
-      <div class="kpi"><span class="kpi-num" id="kpi-best">–</span><span class="kpi-label">best measured accuracy</span></div>
-      <div class="kpi"><span class="kpi-num" id="kpi-sota">–</span><span class="kpi-label">paper reference (GoA-6)</span></div>
+    <p class="lede">Six open 7–8B models, three baseline harnesses, one brutal question set.
+    Every run is measured end-to-end — accuracy, wall-clock latency, token spend —
+    and plotted as Pareto curves, not vibes. Paper-reported numbers are badged
+    <span class="badge paper">paper</span>; everything else ran on a single 24&nbsp;GB rig.</p>
+    <div class="readouts" id="kpis">
+      <div class="readout reveal">
+        <span class="led led-coral"></span>
+        <span class="ro-num mono" id="kpi-arch" data-count="0">–</span>
+        <span class="ro-label">architectures</span>
+      </div>
+      <div class="readout reveal">
+        <span class="led led-coral"></span>
+        <span class="ro-num mono" id="kpi-q" data-count="0">–</span>
+        <span class="ro-label">questions / run</span>
+      </div>
+      <div class="readout reveal">
+        <span class="led led-coral"></span>
+        <span class="ro-num mono accent" id="kpi-best" data-count="0" data-fmt="pct">–</span>
+        <span class="ro-label">best measured accuracy</span>
+      </div>
+      <div class="readout reveal">
+        <span class="led led-amber"></span>
+        <span class="ro-num mono" id="kpi-sota" data-count="0" data-fmt="pct">–</span>
+        <span class="ro-label">paper reference · GoA-6</span>
+      </div>
     </div>
   </section>
 
-  <section class="panel" id="pareto">
+  <section class="panel reveal" id="pareto">
     <div class="panel-head">
       <div>
         <p class="eyebrow">pareto frontier</p>
         <h2>Accuracy vs. <span id="pareto-metric-word">latency</span></h2>
+        <p class="panel-sub">Bubble size = tokens per run. Dashed lines = paper-reported reference points, not measured here.</p>
       </div>
-      <div class="toggle" role="group" aria-label="Pareto x-axis metric">
-        <button class="toggle-btn active" data-metric="latency">latency</button>
-        <button class="toggle-btn" data-metric="cost">cost</button>
+      <div class="seg" id="metric-seg" role="group" aria-label="Pareto x-axis metric">
+        <span class="seg-ind" id="seg-ind"></span>
+        <button class="seg-btn on" data-m="latency">latency</button>
+        <button class="seg-btn" data-m="cost">cost</button>
       </div>
     </div>
-    <p class="panel-sub">Bubble size = tokens per run. Dashed lines = paper-reported reference points (not measured here).</p>
     <div class="chart-wrap">
-      <div id="pareto-chart" style="width:100%;height:420px"></div>
+      <div id="pareto-chart" style="width:100%;height:440px"></div>
       <div class="chart-empty" id="chart-empty" hidden>
         <p>No measured runs yet — the rig hasn't reported in.</p>
         <p class="muted">Paper references below are the targets to beat.</p>
@@ -66,8 +87,8 @@
   </section>
 
   <section id="boards">
-    <p class="eyebrow">architectures</p>
-    <h2>The leaderboard</h2>
+    <p class="eyebrow">leaderboard</p>
+    <h2>Instrument panels</h2>
     <div class="cards" id="cards"></div>
   </section>
 
@@ -77,68 +98,39 @@
     <div class="cards" id="pending-cards"></div>
   </section>
 
-  <section class="panel" id="runs">
+  <section class="panel reveal" id="runs">
     <p class="eyebrow">run history</p>
     <h2>Every run, reproducible</h2>
-    <p class="panel-sub">Each run ships a <span class="mono">config.json</span> (with a config SHA),
-    per-question <span class="mono">records.jsonl</span> and a
-    <span class="mono">summary.json</span>. Same layout as the GoA replication harness.</p>
+    <p class="panel-sub">Each run ships a <span class="mono">config.json</span> with a config SHA,
+    per-question <span class="mono">records.jsonl</span> and a <span class="mono">summary.json</span> —
+    the same layout as the GoA replication harness.</p>
     <div class="table-wrap">
       <table id="runs-table">
         <thead><tr>
-          <th>run</th><th>architecture</th><th>n</th>
-          <th>accuracy</th><th>latency / q</th><th>cost</th><th>kind</th>
+          <th>run</th><th>architecture</th><th class="num">n</th>
+          <th class="num">accuracy</th><th class="num">latency / q</th><th class="num">cost</th><th>kind</th>
         </tr></thead>
         <tbody></tbody>
       </table>
     </div>
   </section>
 
-  <section class="panel" id="method">
+  <section class="panel reveal" id="method">
     <p class="eyebrow">methodology</p>
     <h2>How the numbers are made</h2>
     <div class="method-grid">
-      <div class="method">
-        <h3>Suite</h3>
-        <p>GPQA diamond — 198 expert-written, multiple-choice science questions.
-        The dataset is gated; question text never leaves the rig and is never
-        published here. Dev runs use a fixed 20-question subset (seed 42).</p>
-      </div>
-      <div class="method">
-        <h3>Anti-leak fairness</h3>
-        <p>Answer choices are re-shuffled per question with a recorded seed, so a
-        model can't win by positional bias. Temperature 0 everywhere. The exact
-        shuffle is stored in every run's config.</p>
-      </div>
-      <div class="method">
-        <h3>Agents</h3>
-        <p><span class="mono">single-agent</span> answers directly.
-        <span class="mono">mixture-of-agents</span> runs six domain-specialist
-        proposers, then one aggregator synthesizes.
-        <span class="mono">refine</span> passes the answer through all six
-        models in sequence, each critiquing the last. Graph-of-Agents variants
-        plug in through the same interface.</p>
-      </div>
-      <div class="method">
-        <h3>Cost model</h3>
-        <p>Wall-clock seconds × an assumed $0.50/GPU-hour (4090-class rental),
-        configurable per run. Token counts are reported raw alongside, so you
-        can re-price with any rate you like.</p>
-      </div>
-      <div class="method">
-        <h3>Honesty labels</h3>
-        <p><span class="badge paper">paper</span> rows are numbers reported by
-        the GoA authors — reference targets, not local measurements.
-        <span class="badge measured">measured</span> rows were executed on the
-        24&nbsp;GB rig and link to full run logs.</p>
-      </div>
-      <div class="method">
-        <h3>Reproduce it</h3>
-        <p>The runner, agents and compiler live in <span class="mono">benchmark/</span>.
-        Point it at any OpenAI-compatible endpoint, or at the six vLLM servers
-        from the GoA replication scaffold — the pool serves models one at a
-        time and swaps them between agent steps automatically.</p>
-      </div>
+      <div class="method"><span class="m-idx mono">01</span><h3>Suite</h3>
+        <p>GPQA diamond — 198 expert-written multiple-choice science questions. The dataset is gated; question text never leaves the rig and is never published here. Dev runs use a fixed 20-question subset.</p></div>
+      <div class="method"><span class="m-idx mono">02</span><h3>Anti-leak fairness</h3>
+        <p>Answer choices are re-shuffled per question with a recorded seed, so no model wins on positional bias. Temperature 0 everywhere. The exact shuffle ships in every run config.</p></div>
+      <div class="method"><span class="m-idx mono">03</span><h3>Agents</h3>
+        <p><span class="mono">single-agent</span> answers directly. <span class="mono">mixture-of-agents</span> runs six domain-specialist proposers, then one aggregator synthesizes. <span class="mono">refine</span> passes the answer through all six models in sequence. Graph-of-Agents variants plug into the same interface.</p></div>
+      <div class="method"><span class="m-idx mono">04</span><h3>Cost model</h3>
+        <p>Wall-clock seconds × an assumed $0.50/GPU-hour (4090-class rental), configurable per run. Raw token counts are reported alongside, so any rate can be re-applied.</p></div>
+      <div class="method"><span class="m-idx mono">05</span><h3>Honesty labels</h3>
+        <p><span class="badge paper">paper</span> rows are author-reported reference targets, not local measurements. <span class="badge measured">measured</span> rows executed on the 24&nbsp;GB rig and link to full run logs.</p></div>
+      <div class="method"><span class="m-idx mono">06</span><h3>Reproduce it</h3>
+        <p>The runner, agents and compiler live in <span class="mono">benchmark/</span>. Point it at any OpenAI-compatible endpoint — or at the six vLLM servers from the GoA scaffold, which the pool serves one at a time, swapping between agent steps automatically.</p></div>
     </div>
   </section>
 </main>
