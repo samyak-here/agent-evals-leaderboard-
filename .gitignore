@@ -1,0 +1,6 @@
+# GPQA question text and local run logs stay off git.
+data/
+results/runs/
+preview/
+__pycache__/
+*.pyc

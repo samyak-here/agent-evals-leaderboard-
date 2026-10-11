@@ -1,0 +1,69 @@
+{
+ "generated_utc": "2026-10-11T03:07:24.150789+00:00",
+ "suite": {
+  "name": "GPQA diamond",
+  "note": "Gated dataset \u2014 question text never published; suite files stay on the rig."
+ },
+ "cost_model": {
+  "gpu_hourly_usd": 0.5,
+  "note": "Assumed 4090-class rental rate; configurable per run via --gpu-hourly-usd. Paper rows carry no cost data."
+ },
+ "rows": [
+  {
+   "id": "paper-goa-6",
+   "architecture": "graph-of-agents",
+   "variant": "GoA-6 (author pool)",
+   "kind": "paper",
+   "n": 198,
+   "accuracy": 0.4054,
+   "mean_latency_s": null,
+   "cost_usd": null,
+   "total_tokens": null,
+   "models": [
+    "qwen25-7b-instruct",
+    "qwen25-coder-7b-instruct",
+    "mathstral-7b",
+    "biomedical-llama3-8b",
+    "finance-llama3-8b",
+    "saul-7b-instruct"
+   ],
+   "date": "2025-01-01",
+   "source": "UNITES-Lab/GoA paper (reported GPQA-diamond accuracy)",
+   "notes": "Target to reproduce in the local replication."
+  },
+  {
+   "id": "paper-moa-6",
+   "architecture": "mixture-of-agents",
+   "variant": "MoA-6 (author pool)",
+   "kind": "paper",
+   "n": 198,
+   "accuracy": 0.3283,
+   "mean_latency_s": null,
+   "cost_usd": null,
+   "total_tokens": null,
+   "models": [
+    "qwen25-7b-instruct",
+    "qwen25-coder-7b-instruct",
+    "mathstral-7b",
+    "biomedical-llama3-8b",
+    "finance-llama3-8b",
+    "saul-7b-instruct"
+   ],
+   "date": "2025-01-01",
+   "source": "UNITES-Lab/GoA paper (reported GPQA-diamond accuracy)",
+   "notes": "Baseline to beat."
+  }
+ ],
+ "pending": [
+  {
+   "architecture": "graph-of-agents",
+   "variant": "GoA-6 (author pool)",
+   "detail": "Blocked on the M2 replication run \u2014 plugs in via benchmark/agents_goa_stub.py, no code changes needed."
+  },
+  {
+   "architecture": "single-agent",
+   "variant": "per-model baselines",
+   "detail": "Six single-model runs (one per pool model) on the rig."
+  }
+ ]
+}
